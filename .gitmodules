@@ -7,3 +7,6 @@
 [submodule "user"]
 	path = user
 	url = git@github.com:mf-sakura/bh_user.git
+[submodule "gateway"]
+	path = gateway
+	url = git@github.com:mf-sakura/bh_gateway.git

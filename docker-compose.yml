@@ -21,11 +21,15 @@ services:
       - 50001:5001
     links:
       - mysql_hotel
+      - jaeger
     environment:
       - MYSQL_PASSWORD=password
       - MYSQL_USER=root
       - MYSQL_PORT=3306
       - MYSQL_HOST=mysql_hotel
+      - JAEGER_SERVICE_NAME=booking_hotel
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
 
   # User
   mysql_user:
@@ -41,14 +45,44 @@ services:
       - mysql_user
     links:
       - mysql_user
+      - jaeger
   user:
     build: user/app
     ports:
       - 50002:5002
     links:
       - mysql_user
+      - jaeger
     environment:
       - MYSQL_PASSWORD=password
       - MYSQL_USER=root
       - MYSQL_PORT=3306
       - MYSQL_HOST=mysql_user
+      - JAEGER_SERVICE_NAME=booking_hotel
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+
+  # Gateway
+  gateway:
+    build: gateway/app
+    ports:
+      - 50003:5003
+    links:
+      - user
+      - hotel
+      - jaeger
+    environment:
+      - HOTEL_HOST=hotel
+      - HOTEL_PORT=5001
+      - USER_HOST=user
+      - USER_PORT=5002
+      - JAEGER_SERVICE_NAME=booking_hotel
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+
+  # jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:1.7
+    ports:
+      - 6831:6831
+      - 16686:16686
