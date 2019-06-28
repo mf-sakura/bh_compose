@@ -1,0 +1,6 @@
+[submodule "proto"]
+	path = proto
+	url = git@github.com:mf-sakura/bh_proto.git
+[submodule "hotel"]
+	path = hotel
+	url = git@github.com:mf-sakura/bh_hotel.git
