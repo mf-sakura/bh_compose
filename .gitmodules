@@ -4,3 +4,6 @@
 [submodule "hotel"]
 	path = hotel
 	url = git@github.com:mf-sakura/bh_hotel.git
+[submodule "user"]
+	path = user
+	url = git@github.com:mf-sakura/bh_user.git

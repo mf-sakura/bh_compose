@@ -1,6 +1,7 @@
 version: "3"
 
 services:
+  # Hotel
   mysql_hotel:
     image: mysql:5.7
     # command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
@@ -25,3 +26,29 @@ services:
       - MYSQL_USER=root
       - MYSQL_PORT=3306
       - MYSQL_HOST=mysql_hotel
+
+  # User
+  mysql_user:
+    image: mysql:5.7
+    # command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    ports:
+      - 3308:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+  mysql_user_setup:
+    build: user/db
+    depends_on:
+      - mysql_user
+    links:
+      - mysql_user
+  user:
+    build: user/app
+    ports:
+      - 50002:5002
+    links:
+      - mysql_user
+    environment:
+      - MYSQL_PASSWORD=password
+      - MYSQL_USER=root
+      - MYSQL_PORT=3306
+      - MYSQL_HOST=mysql_user
